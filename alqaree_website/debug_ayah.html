@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - الآية القرآنية</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; direction: rtl; }
+        .debug-section { background: white; padding: 20px; margin: 10px 0; border-radius: 8px; border: 1px solid #ddd; }
+        .result { background: #f9f9f9; padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { color: green; }
+        .error { color: red; }
+        pre { background: #f0f0f0; padding: 10px; border-radius: 4px; overflow-x: auto; max-width: 100%; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>تشخيص مشكلة الآية القرآنية</h1>
+
+    <div class="debug-section">
+        <h2>اختبار API الآيات</h2>
+        <button onclick="testAyahAPI()">اختبار API</button>
+        <div id="api-result" class="result">اضغط الزر للاختبار</div>
+    </div>
+
+    <div class="debug-section">
+        <h2>حالة عناصر DOM</h2>
+        <button onclick="checkDOM()">فحص العناصر</button>
+        <div id="dom-result" class="result"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>محاكاة تحميل آية</h2>
+        <button onclick="simulateAyahLoad()">محاكاة التحميل</button>
+        <div id="simulate-result" class="result"></div>
+    </div>
+
+    <script>
+        async function testAyahAPI() {
+            const resultDiv = document.getElementById('api-result');
+            resultDiv.innerHTML = '<div class="error">جاري الاختبار...</div>';
+
+            try {
+                const response = await fetch('get_random_ayah.php', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('API Response:', data);
+
+                if (data.success && data.ayah) {
+                    resultDiv.innerHTML = `
+                        <div class="success">✅ API يعمل - تم استلام البيانات</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">❌ API يعيد success=false</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                console.error('API Error:', error);
+                resultDiv.innerHTML = `
+                    <div class="error">❌ خطأ في الاتصال: ${error.message}</div>
+                `;
+            }
+        }
+
+        function checkDOM() {
+            const resultDiv = document.getElementById('dom-result');
+            const elements = [
+                'randomAyahContent',
+                'ayahLoading',
+                'ayahError',
+                'ayahText',
+                'ayahReference',
+                'surahName',
+                'ayahNumber',
+                'revelationType',
+                'juzNumber',
+                'refreshAyah',
+                'retryAyah'
+            ];
+
+            let html = '<h3>حالة العناصر:</h3>';
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    html += `<div class="success">✅ ${id}: موجود</div>`;
+                } else {
+                    html += `<div class="error">❌ ${id}: غير موجود</div>`;
+                }
+            });
+
+            resultDiv.innerHTML = html;
+        }
+
+        function simulateAyahLoad() {
+            const resultDiv = document.getElementById('simulate-result');
+
+            // محاكاة البيانات
+            const mockData = {
+                success: true,
+                ayah: {
+                    id: 1,
+                    surah_number: 2,
+                    ayah_number: 255,
+                    ayah_text: "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
+                    juz_number: 3,
+                    revelation_type: "meccan",
+                    reference: "سورة البقرة - الآية 255",
+                    surah_name_arabic: "البقرة",
+                    revelation_type_arabic: "مدنية"
+                }
+            };
+
+            resultDiv.innerHTML = '<div class="error">جاري المحاكاة...</div>';
+
+            setTimeout(() => {
+                try {
+                    // محاكاة تحديث DOM
+                    const ayahContent = document.getElementById('randomAyahContent');
+                    const ayahText = document.getElementById('ayahText');
+                    const ayahReference = document.getElementById('ayahReference');
+                    const surahName = document.getElementById('surahName');
+                    const ayahNumber = document.getElementById('ayahNumber');
+                    const revelationType = document.getElementById('revelationType');
+                    const juzNumber = document.getElementById('juzNumber');
+
+                    if (ayahContent && ayahText && ayahReference) {
+                        ayahText.textContent = mockData.ayah.ayah_text;
+                        ayahReference.textContent = `صدق الله العظيم - ${mockData.ayah.reference}`;
+                        surahName.textContent = mockData.ayah.surah_name_arabic;
+                        ayahNumber.textContent = mockData.ayah.ayah_number;
+                        revelationType.textContent = mockData.ayah.revelation_type_arabic;
+                        juzNumber.textContent = mockData.ayah.juz_number;
+
+                        ayahContent.style.display = 'block';
+                        resultDiv.innerHTML = '<div class="success">✅ تم تحديث DOM بنجاح</div>';
+                    } else {
+                        resultDiv.innerHTML = '<div class="error">❌ عناصر DOM غير موجودة</div>';
+                    }
+                } catch (error) {
+                    resultDiv.innerHTML = `<div class="error">❌ خطأ في المحاكاة: ${error.message}</div>`;
+                }
+            }, 1000);
+        }
+
+        // تشغيل فحص DOM عند تحميل الصفحة
+        window.addEventListener('load', checkDOM);
+    </script>
+</body>
+</html>

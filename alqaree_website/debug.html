@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - اختبار الوظائف</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; direction: rtl; }
+        .test-section { background: white; padding: 20px; margin: 10px 0; border-radius: 8px; border: 1px solid #ddd; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        pre { background: #f0f0f0; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>اختبار وظائف الموقع</h1>
+
+    <div class="test-section">
+        <h2>1. اختبار الآيات</h2>
+        <button onclick="testAyah()">اختبار تحميل الآية</button>
+        <div id="ayah-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. اختبار التلاوات</h2>
+        <button onclick="testTilawat()">اختبار تحميل التلاوة</button>
+        <div id="tilawat-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. اختبار المواعظ</h2>
+        <button onclick="testHekum()">اختبار تحميل الموعظة</button>
+        <div id="hekum-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. اختبار المقالات</h2>
+        <button onclick="testArticles()">اختبار تحميل المقالة</button>
+        <div id="articles-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Console Log</h2>
+        <div id="console-log" class="result"></div>
+    </div>
+
+    <script>
+        // Custom console to capture logs
+        const originalLog = console.log;
+        const originalError = console.error;
+        const consoleDiv = document.getElementById('console-log');
+
+        function addToConsole(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            consoleDiv.appendChild(div);
+        }
+
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addToConsole(args.join(' '), 'info');
+        };
+
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addToConsole(args.join(' '), 'error');
+        };
+
+        // Test functions
+        function testAyah() {
+            console.log('Testing Ayah API...');
+            const resultDiv = document.getElementById('ayah-result');
+            resultDiv.innerHTML = '<div class="info">جاري الاختبار...</div>';
+
+            fetch('get_random_ayah.php', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Data received:', data);
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="success">✅ نجح الاختبار</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">❌ فشل الاختبار</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <div class="error">❌ خطأ في الاتصال</div>
+                    <pre>${error.message}</pre>
+                `;
+            });
+        }
+
+        function testTilawat() {
+            console.log('Testing Tilawat API...');
+            const resultDiv = document.getElementById('tilawat-result');
+            resultDiv.innerHTML = '<div class="info">جاري الاختبار...</div>';
+
+            fetch('get_random_tilawat.php', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Data received:', data);
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="success">✅ نجح الاختبار</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">❌ فشل الاختبار</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <div class="error">❌ خطأ في الاتصال</div>
+                    <pre>${error.message}</pre>
+                `;
+            });
+        }
+
+        function testHekum() {
+            console.log('Testing Hekum API...');
+            const resultDiv = document.getElementById('hekum-result');
+            resultDiv.innerHTML = '<div class="info">جاري الاختبار...</div>';
+
+            fetch('get_random_hekum.php', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Data received:', data);
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="success">✅ نجح الاختبار</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">❌ فشل الاختبار</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <div class="error">❌ خطأ في الاتصال</div>
+                    <pre>${error.message}</pre>
+                `;
+            });
+        }
+
+        function testArticles() {
+            console.log('Testing Articles API...');
+            const resultDiv = document.getElementById('articles-result');
+            resultDiv.innerHTML = '<div class="info">جاري الاختبار...</div>';
+
+            fetch('get_random_articles.php', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Data received:', data);
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="success">✅ نجح الاختبار</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">❌ فشل الاختبار</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <div class="error">❌ خطأ في الاتصال</div>
+                    <pre>${error.message}</pre>
+                `;
+            });
+        }
+
+        // Auto-run tests
+        window.addEventListener('load', function() {
+            console.log('Page loaded, starting tests...');
+            setTimeout(() => {
+                testAyah();
+                setTimeout(testTilawat, 1000);
+                setTimeout(testHekum, 2000);
+                setTimeout(testArticles, 3000);
+            }, 500);
+        });
+    </script>
+</body>
+</html>

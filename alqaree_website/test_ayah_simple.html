@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>اختبار بسيط للآية</title>
+</head>
+<body>
+    <h1>اختبار الآية</h1>
+    <button onclick="testAyah()">اختبار</button>
+    <div id="result"></div>
+
+    <script>
+        async function testAyah() {
+            document.getElementById('result').innerHTML = 'جاري التحميل...';
+
+            try {
+                const response = await fetch('get_random_ayah.php');
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('result').innerHTML = `
+                        <h2>✅ نجح!</h2>
+                        <p><strong>الآية:</strong> ${data.ayah.ayah_text}</p>
+                        <p><strong>المرجع:</strong> ${data.ayah.reference}</p>
+                    `;
+                } else {
+                    document.getElementById('result').innerHTML = `
+                        <h2>❌ فشل</h2>
+                        <p>الرد: ${JSON.stringify(data)}</p>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <h2>❌ خطأ</h2>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

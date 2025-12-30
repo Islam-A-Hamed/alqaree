@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار النافذة المنبثقة</title>
+    <link rel="stylesheet" href="css/index-page.css">
+    <style>
+        body { margin: 20px; direction: rtl; }
+        .test-btn { padding: 10px 20px; margin: 10px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 5px; }
+        .test-btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>اختبار النافذة المنبثقة للمقالات</h1>
+
+    <button class="test-btn" onclick="testModal()">اختبار النافذة المنبثقة</button>
+    <button class="test-btn" onclick="testAPI()">اختبار API المقالات</button>
+
+    <div id="result"></div>
+
+    <!-- Article Modal -->
+    <div id="articleModal" class="modal">
+        <div class="modal-content article-modal-content">
+            <button class="close-btn article-modal-close">&times;</button>
+            <div class="modal-header">
+                <h2 id="modalArticleTitle"></h2>
+                <div class="modal-meta">
+                    <p><strong>الكاتب:</strong> <span id="modalArticleAuthor"></span></p>
+                    <p><strong>التصنيف:</strong> <span id="modalArticleCategory"></span></p>
+                    <p><strong>تاريخ النشر:</strong> <span id="modalArticleDate"></span></p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div id="modalArticleContent" class="article-modal-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function testAPI() {
+            document.getElementById('result').innerHTML = 'جاري اختبار API...';
+
+            try {
+                const response = await fetch('get_random_articles.php');
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('result').innerHTML = `
+                        <h3 style="color: green;">✅ API يعمل</h3>
+                        <p><strong>العنوان:</strong> ${data.articles[0].title}</p>
+                        <p><strong>الكاتب:</strong> ${data.articles[0].author_name}</p>
+                        <p><strong>المحتوى:</strong> ${data.articles[0].content.substring(0, 100)}...</p>
+                    `;
+                } else {
+                    document.getElementById('result').innerHTML = `
+                        <h3 style="color: red;">❌ API يعيد خطأ</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <h3 style="color: red;">❌ خطأ في الاتصال</h3>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+
+        function testModal() {
+            // بيانات تجريبية
+            document.getElementById('modalArticleTitle').textContent = 'مقالة تجريبية';
+            document.getElementById('modalArticleAuthor').textContent = 'الكاتب التجريبي';
+            document.getElementById('modalArticleCategory').textContent = 'تصنيف تجريبي';
+            document.getElementById('modalArticleDate').textContent = new Date().toLocaleDateString('ar');
+            document.getElementById('modalArticleContent').innerHTML = `
+                <p>هذا محتوى تجريبي للنافذة المنبثقة.</p>
+                <p>النافذة تعمل بشكل صحيح إذا ظهرت هذه الرسالة.</p>
+                <p>يمكنك إغلاق النافذة بالضغط على × أو بالضغط خارج النافذة أو بالضغط على Escape.</p>
+            `;
+
+            const modal = document.getElementById('articleModal');
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // إضافة event listeners لإغلاق الـ modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('articleModal');
+            const closeBtn = document.querySelector('.article-modal-close');
+
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                });
+            }
+
+            if (modal) {
+                modal.addEventListener('click', function(event) {
+                    if (event.target === modal) {
+                        modal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+
+                document.addEventListener('keydown', function(event) {
+                    if (event.key === 'Escape' && modal.style.display === 'flex') {
+                        modal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

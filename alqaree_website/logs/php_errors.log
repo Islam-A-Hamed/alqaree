@@ -1,0 +1,10 @@
+[25-Dec-2025 20:36:38 Africa/Cairo] PHP Warning:  ini_set(): Session ini settings cannot be changed when a session is active in C:\xampp\htdocs\alqaree_website\includes\config.php on line 52
+[25-Dec-2025 20:36:38 Africa/Cairo] PHP Warning:  ini_set(): Session ini settings cannot be changed when a session is active in C:\xampp\htdocs\alqaree_website\includes\config.php on line 53
+[25-Dec-2025 20:36:38 Africa/Cairo] PHP Warning:  ini_set(): Session ini settings cannot be changed when a session is active in C:\xampp\htdocs\alqaree_website\includes\config.php on line 54
+[25-Dec-2025 20:36:38 Africa/Cairo] PHP Warning:  ini_set(): Session ini settings cannot be changed when a session is active in C:\xampp\htdocs\alqaree_website\includes\config.php on line 55
+[25-Dec-2025 20:36:38 Africa/Cairo] PHP Warning:  ini_set(): Session ini settings cannot be changed when a session is active in C:\xampp\htdocs\alqaree_website\includes\config.php on line 56
+[25-Dec-2025 20:36:43 Africa/Cairo] PHP Warning:  ini_set(): Session ini settings cannot be changed when a session is active in C:\xampp\htdocs\alqaree_website\includes\config.php on line 52
+[25-Dec-2025 20:36:43 Africa/Cairo] PHP Warning:  ini_set(): Session ini settings cannot be changed when a session is active in C:\xampp\htdocs\alqaree_website\includes\config.php on line 53
+[25-Dec-2025 20:36:43 Africa/Cairo] PHP Warning:  ini_set(): Session ini settings cannot be changed when a session is active in C:\xampp\htdocs\alqaree_website\includes\config.php on line 54
+[25-Dec-2025 20:36:43 Africa/Cairo] PHP Warning:  ini_set(): Session ini settings cannot be changed when a session is active in C:\xampp\htdocs\alqaree_website\includes\config.php on line 55
+[25-Dec-2025 20:36:43 Africa/Cairo] PHP Warning:  ini_set(): Session ini settings cannot be changed when a session is active in C:\xampp\htdocs\alqaree_website\includes\config.php on line 56
